@@ -22,7 +22,7 @@ public class StringBuilderCodec {
 			}
 
 			tString = tString.replaceAll("\\\\", "\\\\\\\\");
-			tString = tString.replaceAll("\"", "\\\"");
+			tString = tString.replaceAll("\"", "\\\\\"");
 			tString = tString.replaceAll("\r", "\\\\r");
 			tString = tString.replaceAll("\n", "\\\\n");
 
