@@ -14,8 +14,6 @@ import java.awt.event.FocusListener;
 import javax.swing.JFrame;
 
 public class App {
-	private static final String NEW_LINE = System.lineSeparator();
-
 	public static void main(String[] aArgs) {
 		JFrame tFrame = new JFrame("StringBuilderBuilder");
 		int tWidth = 800;
@@ -48,7 +46,7 @@ public class App {
 			public void focusLost(FocusEvent aEvent) {
 				String tToText;
 				try {
-					tToText = StringBuilderCodec.encode("tStringBuilder", NEW_LINE, tFrom.getText());
+					tToText = convertToText(tFrom.getText());
 				} catch (Exception aCause) {
 					tToText = ExceptionUtil.toString(aCause);
 				}
@@ -59,5 +57,11 @@ public class App {
 			public void focusGained(FocusEvent aEvent) {
 			}
 		});
+	}
+
+	private static String convertToText(String aFromText) {
+		final String tSystemNewLine = System.lineSeparator();
+		final String tNewLine = "\n";
+		return StringBuilderCodec.encode("tStringBuilder", tNewLine, aFromText.replaceAll(tSystemNewLine, tNewLine));
 	}
 }
