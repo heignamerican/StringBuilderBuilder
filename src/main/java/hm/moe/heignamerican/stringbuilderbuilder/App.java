@@ -87,21 +87,26 @@ public class App {
 		}
 	}
 
-	private static String convertToText(String aText, String aNewLine) {
-		try {
-			final String tSystemNewLine = System.lineSeparator();
-			return StringBuilderCodec.encode("tStringBuilder", aNewLine, aText.replaceAll(tSystemNewLine, aNewLine));
-		} catch (Exception aCause) {
-			return ExceptionUtil.toString(aCause);
-		}
-	}
-
 	private static JComboBox<ComboBoxItem<String>> mNewLine;
 	private static TextArea mFrom;
 	private static TextArea mTo;
 
 	private static void updateText() {
-		final String tNewLine = ComboBoxItem.getSelectedValue(mNewLine);
-		mTo.setText(convertToText(mFrom.getText(), tNewLine).replaceAll("\\n" + "$", System.lineSeparator()));
+		final String tInput = mFrom.getText();
+		final String tDisplayNewLine = ComboBoxItem.getSelectedValue(mNewLine);
+		final String tSystemNewLine = System.lineSeparator();
+
+		String tOutput;
+		try {
+			tOutput = convertText(tInput, tDisplayNewLine, tSystemNewLine);
+		} catch (Exception aCause) {
+			tOutput = ExceptionUtil.toString(aCause);
+		}
+
+		mTo.setText(tOutput);
+	}
+
+	private static String convertText(final String aInput, final String aDisplayNewLine, final String aSystemNewLine) {
+		return StringBuilderCodec.encode("tStringBuilder", aDisplayNewLine, aInput.replaceAll(aSystemNewLine, aDisplayNewLine)).replaceAll("\\n" + "$", aSystemNewLine);
 	}
 }
