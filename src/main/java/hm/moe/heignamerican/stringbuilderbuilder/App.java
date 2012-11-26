@@ -5,13 +5,18 @@ import heignamerican.myutils.ExceptionUtil;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Panel;
 import java.awt.Rectangle;
 import java.awt.TextArea;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JSplitPane;
 
 public class App {
 	public static void main(String[] aArgs) {
@@ -32,36 +37,74 @@ public class App {
 	}
 
 	private static void createComponents(Container aContainer) {
-		aContainer.setLayout(new GridLayout(1, 2));
+		JSplitPane tSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		aContainer.add(tSplitPane);
 
-		final TextArea tFrom = new TextArea();
-		aContainer.add(tFrom);
+		Container tSelectPanel = new Panel();
+		Container tTextPanel = new Panel();
+		tSplitPane.setTopComponent(tSelectPanel);
+		tSplitPane.setBottomComponent(tTextPanel);
 
-		final TextArea tTo = new TextArea();
-		tTo.setEditable(false);
-		aContainer.add(tTo);
-
-		tFrom.addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent aEvent) {
-				String tToText;
-				try {
-					tToText = convertToText(tFrom.getText());
-				} catch (Exception aCause) {
-					tToText = ExceptionUtil.toString(aCause);
+		{// select
+			final JComboBox<String> tComboBox = new JComboBox<>();
+			tComboBox.addItem("\\n");
+			tComboBox.addItem("\\r\\n");
+			tComboBox.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent aItemEvent) {
+					updateText();
 				}
-				tTo.setText(tToText);
-			}
+			});
 
-			@Override
-			public void focusGained(FocusEvent aEvent) {
-			}
-		});
+			tSelectPanel.add(tComboBox);
+
+			mNewLine = tComboBox;
+		}
+
+		{// text
+			tTextPanel.setLayout(new GridLayout(1, 2));
+
+			final TextArea tFrom = new TextArea();
+			tTextPanel.add(tFrom);
+
+			final TextArea tTo = new TextArea();
+			tTo.setEditable(false);
+			tTextPanel.add(tTo);
+
+			tFrom.addFocusListener(new FocusListener() {
+				@Override
+				public void focusLost(FocusEvent aEvent) {
+					updateText();
+				}
+
+				@Override
+				public void focusGained(FocusEvent aEvent) {
+				}
+			});
+
+			mFrom = tFrom;
+			mTo = tTo;
+		}
 	}
 
 	private static String convertToText(String aFromText) {
 		final String tSystemNewLine = System.lineSeparator();
 		final String tNewLine = "\n";
 		return StringBuilderCodec.encode("tStringBuilder", tNewLine, aFromText.replaceAll(tSystemNewLine, tNewLine));
+	}
+
+	@SuppressWarnings("unused")
+	private static JComboBox<String> mNewLine;
+	private static TextArea mFrom;
+	private static TextArea mTo;
+
+	private static void updateText() {
+		String tToText;
+		try {
+			tToText = convertToText(mFrom.getText());
+		} catch (Exception aCause) {
+			tToText = ExceptionUtil.toString(aCause);
+		}
+		mTo.setText(tToText);
 	}
 }
