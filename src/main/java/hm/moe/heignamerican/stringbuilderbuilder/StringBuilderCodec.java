@@ -29,7 +29,7 @@ public class StringBuilderCodec {
 			tBuilder.append(aStringBuilderInstanceName);
 			tBuilder.append(".append(\"");
 			tBuilder.append(tString);
-			tBuilder.append("\");\n");
+			tBuilder.append("\");" + aNewLine);
 		}
 
 		return tBuilder.toString();

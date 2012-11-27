@@ -25,6 +25,12 @@ public class ComboBoxItem<T> {
 		return mName;
 	}
 
+	public static <T> String getSelectedName(JComboBox<ComboBoxItem<String>> aComboBox) {
+		@SuppressWarnings("unchecked")
+		ComboBoxItem<T> tItem = (ComboBoxItem<T>) aComboBox.getSelectedItem();
+		return tItem.getName();
+	}
+
 	public static <T> T getSelectedValue(JComboBox<ComboBoxItem<T>> aComboBox) {
 		@SuppressWarnings("unchecked")
 		ComboBoxItem<T> tItem = (ComboBoxItem<T>) aComboBox.getSelectedItem();
