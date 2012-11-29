@@ -34,6 +34,8 @@ public class App {
 		createComponents(tFrame.getContentPane());
 
 		tFrame.setVisible(true);
+
+		Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(new FocusEvent(mFrom, FocusEvent.FOCUS_GAINED));
 	}
 
 	private static void createComponents(Container aContainer) {
