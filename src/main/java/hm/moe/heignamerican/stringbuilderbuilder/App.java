@@ -46,9 +46,9 @@ public class App {
 		tSplitPane.setBottomComponent(tTextPanel);
 
 		{// select
-			final JComboBox<ComboBoxItem<String>> tComboBox = new JComboBox<>();
-			tComboBox.addItem(new ComboBoxItem<String>("\\n", "\n"));
-			tComboBox.addItem(new ComboBoxItem<String>("\\r\\n", "\r\n"));
+			final JComboBox<String> tComboBox = new JComboBox<>();
+			tComboBox.addItem("\\n");
+			tComboBox.addItem("\\r\\n");
 			tComboBox.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent aItemEvent) {
@@ -87,13 +87,13 @@ public class App {
 		}
 	}
 
-	private static JComboBox<ComboBoxItem<String>> mNewLine;
+	private static JComboBox<String> mNewLine;
 	private static TextArea mFrom;
 	private static TextArea mTo;
 
 	private static void updateText() {
 		final String tInput = mFrom.getText();
-		final String tDisplayNewLineEscaped = ComboBoxItem.getSelectedName(mNewLine);
+		final String tDisplayNewLineEscaped = mNewLine.getSelectedItem().toString();
 		final String tSystemNewLine = System.lineSeparator();
 
 		String tOutput;
