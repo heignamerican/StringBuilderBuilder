@@ -4,10 +4,7 @@ import heignamerican.myutils.ExceptionUtil;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Panel;
 import java.awt.Rectangle;
-import java.awt.TextArea;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -16,7 +13,9 @@ import java.awt.event.ItemListener;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 
 public class App {
 	public static void main(String[] aArgs) {
@@ -32,20 +31,24 @@ public class App {
 		tFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		createComponents(tFrame.getContentPane());
-
 		tFrame.setVisible(true);
 
+		tyousei();
+	}
+
+	private static void tyousei() {
+		mTextSplitPane.setDividerLocation(0.5);
 		Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(new FocusEvent(mFrom, FocusEvent.FOCUS_GAINED));
 	}
 
 	private static void createComponents(Container aContainer) {
-		JSplitPane tSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		aContainer.add(tSplitPane);
+		JSplitPane tRootSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		aContainer.add(tRootSplitPane);
 
-		Container tSelectPanel = new Panel();
-		Container tTextPanel = new Panel();
-		tSplitPane.setTopComponent(tSelectPanel);
-		tSplitPane.setBottomComponent(tTextPanel);
+		JPanel tSelectPanel = new JPanel();
+		mTextSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		tRootSplitPane.setTopComponent(tSelectPanel);
+		tRootSplitPane.setBottomComponent(mTextSplitPane);
 
 		{// select
 			final JComboBox<String> tComboBox = new JComboBox<>();
@@ -64,23 +67,21 @@ public class App {
 		}
 
 		{// text
-			tTextPanel.setLayout(new GridLayout(1, 2));
+			JTextArea tFrom = new JTextArea();
+			mTextSplitPane.setLeftComponent(tFrom);
 
-			TextArea tFrom = new TextArea();
-			tTextPanel.add(tFrom);
-
-			TextArea tTo = new TextArea();
+			JTextArea tTo = new JTextArea();
 			tTo.setEditable(false);
-			tTextPanel.add(tTo);
+			mTextSplitPane.setRightComponent(tTo);
 
 			tFrom.addFocusListener(new FocusListener() {
 				@Override
-				public void focusLost(FocusEvent aEvent) {
+				public void focusLost(FocusEvent aE) {
 					updateText();
 				}
 
 				@Override
-				public void focusGained(FocusEvent aEvent) {
+				public void focusGained(FocusEvent aE) {
 				}
 			});
 
@@ -90,17 +91,17 @@ public class App {
 	}
 
 	private static JComboBox<String> mNewLine;
-	private static TextArea mFrom;
-	private static TextArea mTo;
+	private static JTextArea mFrom;
+	private static JTextArea mTo;
+	private static JSplitPane mTextSplitPane;
 
 	private static void updateText() {
 		final String tInput = mFrom.getText();
 		final String tDisplayNewLineEscaped = mNewLine.getSelectedItem().toString();
-		final String tSystemNewLine = System.lineSeparator();
 
 		String tOutput;
 		try {
-			tOutput = StringBuilderCodec.encode(tInput, tDisplayNewLineEscaped, tSystemNewLine, "tStringBuilder");
+			tOutput = StringBuilderCodec.encode(tInput, tDisplayNewLineEscaped, "\n", "tStringBuilder");
 		} catch (Exception aCause) {
 			tOutput = ExceptionUtil.toString(aCause);
 		}
