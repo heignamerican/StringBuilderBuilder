@@ -6,13 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StringBuilderCodec {
-	private static final String[] ESCAPES = { "\\\\", // 順番大事！！
-			"\"", //
-			"\t", //
-			"\r", //
-			"\n", //
-	};
-
 	public static String encode(final String aInput, final String aDisplayNewLineEscaped, final String aSystemNewLine, final String aBuilderName) {
 		final String[] tSplit = aInput.split(aSystemNewLine, -1);
 
@@ -27,9 +20,11 @@ public class StringBuilderCodec {
 			final String tEscaped;
 			{
 				String tTemp = tString;
-				for (final String tEscape : ESCAPES) {
-					tTemp = tTemp.replaceAll(tEscape, "\\\\" + tEscape);
-				}
+				tTemp = tTemp.replaceAll("\\\\", "\\\\\\\\");
+				tTemp = tTemp.replaceAll("\"", "\\\\\"");
+				tTemp = tTemp.replaceAll("\t", "\\\\\\t");
+				tTemp = tTemp.replaceAll("\r", "\\\\\\r");
+				tTemp = tTemp.replaceAll("\n", "\\\\\\n");
 				tEscaped = tTemp;
 			}
 

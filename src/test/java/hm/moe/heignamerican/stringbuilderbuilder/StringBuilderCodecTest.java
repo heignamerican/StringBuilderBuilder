@@ -21,6 +21,17 @@ public class StringBuilderCodecTest {
 	}
 
 	@Test
+	public void testEncodeタブ文字() {
+		String tEncode = StringBuilderCodec.encode("\t", "\\n", "\n", "hoge");
+
+		final StringBuilder tExpectedBuilder = new StringBuilder();
+		tExpectedBuilder.append("final StringBuilder hoge = new StringBuilder();\n");
+		tExpectedBuilder.append("hoge.append(\"\\t\");");
+
+		assertThat(tEncode, is(tExpectedBuilder.toString()));
+	}
+
+	@Test
 	public void testEncode_ダブルクウォートのエスケープ() {
 		String tEncode = StringBuilderCodec.encode("hoge\"1\"", "\\n", "\n", "hoge");
 
