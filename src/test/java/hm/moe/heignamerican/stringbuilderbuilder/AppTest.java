@@ -35,6 +35,6 @@ public class AppTest {
 	}
 
 	private String convertText(final String aInput, final String aDisplayNewLine, final String aDisplayNewLineEscaped, final String aSystemNewLine) {
-		return App.convertText(aInput, aDisplayNewLine, aDisplayNewLineEscaped, aSystemNewLine);
+		return StringBuilderCodec.encode(aInput, aDisplayNewLineEscaped, aSystemNewLine, "tStringBuilder");
 	}
 }

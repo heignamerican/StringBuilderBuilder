@@ -8,7 +8,7 @@ import org.junit.Test;
 public class StringBuilderCodecTest {
 	@Test
 	public void testEncode() {
-		String tEncode = StringBuilderCodec.encode("hoge", "\n", "hoge\n\nfuga\n\\nyo\n");
+		String tEncode = StringBuilderCodec.encode("hoge\n\nfuga\n\\nyo\n", "\\n", "\n", "hoge");
 
 		final StringBuilder tExpectedBuilder = new StringBuilder();
 		tExpectedBuilder.append("final StringBuilder hoge = new StringBuilder();\n");
@@ -21,18 +21,19 @@ public class StringBuilderCodecTest {
 	}
 
 	@Test
-	public void test1() {
-		String tEncode = StringBuilderCodec.encode("hoge", "\n", "hoge\"1\"");
+	public void testEncode_ダブルクウォートのエスケープ() {
+		String tEncode = StringBuilderCodec.encode("hoge\"1\"", "\\n", "\n", "hoge");
 
 		final StringBuilder tExpectedBuilder = new StringBuilder();
 		tExpectedBuilder.append("final StringBuilder hoge = new StringBuilder();\n");
-		tExpectedBuilder.append("hoge.append(\"hoge\\\"1\\\"\");\n");
+		tExpectedBuilder.append("hoge.append(\"hoge\\\"1\\\"\");");
 
-		assertThat(tEncode, is(tExpectedBuilder.toString()));
+		String tString = tExpectedBuilder.toString();
+		assertThat(tEncode, is(tString));
 	}
 
 	@Test
-	public void nyo() {
+	public void testEncodeEncoded() {
 		final StringBuilder tStringBuilder = new StringBuilder();
 		tStringBuilder.append("hoge\r\n");
 		tStringBuilder.append("\r\n");

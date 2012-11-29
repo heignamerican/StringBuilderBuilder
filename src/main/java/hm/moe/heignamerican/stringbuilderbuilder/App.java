@@ -93,21 +93,16 @@ public class App {
 
 	private static void updateText() {
 		final String tInput = mFrom.getText();
-		final String tDisplayNewLine = ComboBoxItem.getSelectedValue(mNewLine);
 		final String tDisplayNewLineEscaped = ComboBoxItem.getSelectedName(mNewLine);
 		final String tSystemNewLine = System.lineSeparator();
 
 		String tOutput;
 		try {
-			tOutput = convertText(tInput, tDisplayNewLine, tDisplayNewLineEscaped, tSystemNewLine);
+			tOutput = StringBuilderCodec.encode(tInput, tDisplayNewLineEscaped, tSystemNewLine, "tStringBuilder");
 		} catch (Exception aCause) {
 			tOutput = ExceptionUtil.toString(aCause);
 		}
 
 		mTo.setText(tOutput);
-	}
-
-	static String convertText(final String aInput, final String aDisplayNewLine, final String aDisplayNewLineEscaped, final String aSystemNewLine) {
-		return StringBuilderCodec.encode("tStringBuilder", aDisplayNewLine, aInput.replaceAll(aSystemNewLine, aDisplayNewLine)).replaceAll(aDisplayNewLineEscaped + "$", aSystemNewLine);
 	}
 }
