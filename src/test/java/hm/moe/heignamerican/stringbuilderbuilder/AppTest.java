@@ -8,30 +8,66 @@ import org.junit.Test;
 public class AppTest {
 	@Test
 	public void test表示がCRLFシステムがCRLF() {
-		String tInput = "hoge\r\nfuga\r\n\r\npiyo\r\n\\nyo";
-		String tExpected = "final StringBuilder tStringBuilder = new StringBuilder();\r\ntStringBuilder.append(\"hoge\\r\\n\");\r\ntStringBuilder.append(\"fuga\\r\\n\");\r\ntStringBuilder.append(\"\\r\\n\");\r\ntStringBuilder.append(\"piyo\\r\\n\");\r\ntStringBuilder.append(\"\\\\nyo\");";
-		assertThat(convertText(tInput, "\r\n", "\\r\\n", "\r\n"), is(tExpected));
+		String tEncoded = convertText("hoge\r\nfuga\r\n\r\npiyo\r\n\\nyo", "\r\n", "\\r\\n", "\r\n");
+
+		StringBuilder tExpectedBuilder = new StringBuilder();
+		tExpectedBuilder.append("final StringBuilder tStringBuilder = new StringBuilder();").append("\r\n");
+		tExpectedBuilder.append("final String tNewLine = \"\\r\\n\";").append("\r\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"hoge\").append(tNewLine);").append("\r\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"fuga\").append(tNewLine);").append("\r\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"\").append(tNewLine);").append("\r\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"piyo\").append(tNewLine);").append("\r\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"\\\\nyo\");");
+
+		assertThat(tEncoded, is(tExpectedBuilder.toString()));
 	}
 
 	@Test
 	public void test表示がLFシステムがCRLF() {
-		String tInput = "hoge\r\nfuga\r\n\r\npiyo\r\n\\nyo";
-		String tExpected = "final StringBuilder tStringBuilder = new StringBuilder();\r\ntStringBuilder.append(\"hoge\\n\");\r\ntStringBuilder.append(\"fuga\\n\");\r\ntStringBuilder.append(\"\\n\");\r\ntStringBuilder.append(\"piyo\\n\");\r\ntStringBuilder.append(\"\\\\nyo\");";
-		assertThat(convertText(tInput, "\n", "\\n", "\r\n"), is(tExpected));
+		String tEncoded = convertText("hoge\r\nfuga\r\n\r\npiyo\r\n\\nyo", "\n", "\\n", "\r\n");
+
+		StringBuilder tExpectedBuilder = new StringBuilder();
+		tExpectedBuilder.append("final StringBuilder tStringBuilder = new StringBuilder();").append("\r\n");
+		tExpectedBuilder.append("final String tNewLine = \"\\n\";").append("\r\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"hoge\").append(tNewLine);").append("\r\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"fuga\").append(tNewLine);").append("\r\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"\").append(tNewLine);").append("\r\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"piyo\").append(tNewLine);").append("\r\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"\\\\nyo\");");
+
+		assertThat(tEncoded, is(tExpectedBuilder.toString()));
 	}
 
 	@Test
 	public void test表示がCRLFシステムがLF() {
-		String tInput = "hoge\nfuga\n\npiyo\n\\nyo";
-		String tExpected = "final StringBuilder tStringBuilder = new StringBuilder();\ntStringBuilder.append(\"hoge\\r\\n\");\ntStringBuilder.append(\"fuga\\r\\n\");\ntStringBuilder.append(\"\\r\\n\");\ntStringBuilder.append(\"piyo\\r\\n\");\ntStringBuilder.append(\"\\\\nyo\");";
-		assertThat(convertText(tInput, "\r\n", "\\r\\n", "\n"), is(tExpected));
+		String tEncoded = convertText("hoge\nfuga\n\npiyo\n\\nyo", "\r\n", "\\r\\n", "\n");
+
+		StringBuilder tExpectedBuilder = new StringBuilder();
+		tExpectedBuilder.append("final StringBuilder tStringBuilder = new StringBuilder();").append("\n");
+		tExpectedBuilder.append("final String tNewLine = \"\\r\\n\";").append("\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"hoge\").append(tNewLine);").append("\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"fuga\").append(tNewLine);").append("\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"\").append(tNewLine);").append("\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"piyo\").append(tNewLine);").append("\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"\\\\nyo\");");
+
+		assertThat(tEncoded, is(tExpectedBuilder.toString()));
 	}
 
 	@Test
 	public void test表示がLFシステムがLF() {
-		String tInput = "hoge\nfuga\n\npiyo\n\\nyo";
-		String tExpected = "final StringBuilder tStringBuilder = new StringBuilder();\ntStringBuilder.append(\"hoge\\n\");\ntStringBuilder.append(\"fuga\\n\");\ntStringBuilder.append(\"\\n\");\ntStringBuilder.append(\"piyo\\n\");\ntStringBuilder.append(\"\\\\nyo\");";
-		assertThat(convertText(tInput, "\n", "\\n", "\n"), is(tExpected));
+		String tEncoded = convertText("hoge\nfuga\n\npiyo\n\\nyo", "\n", "\\n", "\n");
+
+		StringBuilder tExpectedBuilder = new StringBuilder();
+		tExpectedBuilder.append("final StringBuilder tStringBuilder = new StringBuilder();").append("\n");
+		tExpectedBuilder.append("final String tNewLine = \"\\n\";").append("\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"hoge\").append(tNewLine);").append("\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"fuga\").append(tNewLine);").append("\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"\").append(tNewLine);").append("\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"piyo\").append(tNewLine);").append("\n");
+		tExpectedBuilder.append("tStringBuilder.append(\"\\\\nyo\");");
+
+		assertThat(tEncoded, is(tExpectedBuilder.toString()));
 	}
 
 	private String convertText(final String aInput, final String aDisplayNewLine, final String aDisplayNewLineEscaped, final String aSystemNewLine) {

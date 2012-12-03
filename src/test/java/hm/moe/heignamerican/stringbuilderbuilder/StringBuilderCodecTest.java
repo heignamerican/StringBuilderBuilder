@@ -11,11 +11,33 @@ public class StringBuilderCodecTest {
 		String tEncode = StringBuilderCodec.encode("hoge\n\nfuga\n\\nyo\n", "\\n", "\n", "hoge");
 
 		final StringBuilder tExpectedBuilder = new StringBuilder();
-		tExpectedBuilder.append("final StringBuilder hoge = new StringBuilder();\n");
-		tExpectedBuilder.append("hoge.append(\"hoge\\n\");\n");
-		tExpectedBuilder.append("hoge.append(\"\\n\");\n");
-		tExpectedBuilder.append("hoge.append(\"fuga\\n\");\n");
-		tExpectedBuilder.append("hoge.append(\"\\\\nyo\\n\");\n");
+		tExpectedBuilder.append("final StringBuilder hoge = new StringBuilder();").append("\n");
+		tExpectedBuilder.append("final String tNewLine = \"\\n\";").append("\n");
+		tExpectedBuilder.append("hoge.append(\"hoge\").append(tNewLine);").append("\n");
+		tExpectedBuilder.append("hoge.append(\"\").append(tNewLine);").append("\n");
+		tExpectedBuilder.append("hoge.append(\"fuga\").append(tNewLine);").append("\n");
+		tExpectedBuilder.append("hoge.append(\"\\\\nyo\").append(tNewLine);");
+
+		assertThat(tEncode, is(tExpectedBuilder.toString()));
+	}
+	@Test
+	public void testEncode1行改行なし() {
+		String tEncode = StringBuilderCodec.encode("a", "\\n", "\n", "hoge");
+
+		final StringBuilder tExpectedBuilder = new StringBuilder();
+		tExpectedBuilder.append("final StringBuilder hoge = new StringBuilder();").append("\n");
+		tExpectedBuilder.append("hoge.append(\"a\");");
+
+		assertThat(tEncode, is(tExpectedBuilder.toString()));
+	}
+	@Test
+	public void testEncode1行改行あり() {
+		String tEncode = StringBuilderCodec.encode("a\n", "\\n", "\n", "hoge");
+
+		final StringBuilder tExpectedBuilder = new StringBuilder();
+		tExpectedBuilder.append("final StringBuilder hoge = new StringBuilder();").append("\n");
+		tExpectedBuilder.append("final String tNewLine = \"\\n\";").append("\n");
+		tExpectedBuilder.append("hoge.append(\"a\").append(tNewLine);");
 
 		assertThat(tEncode, is(tExpectedBuilder.toString()));
 	}
@@ -25,7 +47,7 @@ public class StringBuilderCodecTest {
 		String tEncode = StringBuilderCodec.encode("\t", "\\n", "\n", "hoge");
 
 		final StringBuilder tExpectedBuilder = new StringBuilder();
-		tExpectedBuilder.append("final StringBuilder hoge = new StringBuilder();\n");
+		tExpectedBuilder.append("final StringBuilder hoge = new StringBuilder();").append("\n");
 		tExpectedBuilder.append("hoge.append(\"\\t\");");
 
 		assertThat(tEncode, is(tExpectedBuilder.toString()));
@@ -36,11 +58,10 @@ public class StringBuilderCodecTest {
 		String tEncode = StringBuilderCodec.encode("hoge\"1\"", "\\n", "\n", "hoge");
 
 		final StringBuilder tExpectedBuilder = new StringBuilder();
-		tExpectedBuilder.append("final StringBuilder hoge = new StringBuilder();\n");
+		tExpectedBuilder.append("final StringBuilder hoge = new StringBuilder();").append("\n");
 		tExpectedBuilder.append("hoge.append(\"hoge\\\"1\\\"\");");
 
-		String tString = tExpectedBuilder.toString();
-		assertThat(tEncode, is(tString));
+		assertThat(tEncode, is(tExpectedBuilder.toString()));
 	}
 
 	@Test

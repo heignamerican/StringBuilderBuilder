@@ -12,8 +12,10 @@ public class StringBuilderCodec {
 		final String tBuilderName = aBuilderName;
 		final List<String> tList = new ArrayList<>();
 		tList.add("final StringBuilder " + tBuilderName + " = new StringBuilder();");
-
 		final int tLength = tSplit.length;
+		if (tLength > 1)
+			tList.add("final String tNewLine = \"" + aDisplayNewLineEscaped + "\";");
+
 		for (int i = 0; i < tLength; i++) {
 			final String tString = tSplit[i];
 
@@ -30,12 +32,11 @@ public class StringBuilderCodec {
 
 			if (i == tLength - 1) {
 				if (tString.isEmpty()) {
-					tList.add("");
 					break; // XXX 必要?
 				}
 				tList.add(tBuilderName + ".append(\"" + tEscaped + "\");");
 			} else {
-				tList.add(tBuilderName + ".append(\"" + tEscaped + aDisplayNewLineEscaped + "\");");
+				tList.add(tBuilderName + ".append(\"" + tEscaped + "\").append(tNewLine);");
 			}
 		}
 
